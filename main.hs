@@ -42,3 +42,20 @@ turnAction coins player
             ++ show leftOverCoins
             ++ " remaining"
         return leftOverCoins
+
+
+switchPlayer :: Player -> Player
+switchPlayer player | player == PunyHuman  = GloriousAI
+                    | player == GloriousAI = PunyHuman
+
+
+turn :: Coins -> Player -> IO ()
+turn coins player = do
+    remainingCoins <- turnAction coins player
+    if remainingCoins == 0
+        then
+            putStrLn
+            $  "The "
+            ++ show (switchPlayer player)
+            ++ " player won the match!"
+        else turn remainingCoins $ switchPlayer player
