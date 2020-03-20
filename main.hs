@@ -1,3 +1,5 @@
+import           System.Random
+import           Data.Char
 
 type Coins = Int
 
@@ -58,3 +60,26 @@ turn coins player = do
             ++ show (switchPlayer player)
             ++ " player won the match!"
         else turn remainingCoins $ switchPlayer player
+
+
+lowerString :: String -> String
+lowerString str = [ toLower loweredString | loweredString <- str ]
+
+
+startTheGame :: StdGen -> IO ()
+startTheGame gen = do
+    let (randCoins, _) = randomR (1, 33) gen :: (Int, StdGen)
+    putStrLn $ "There are " ++ show randCoins ++ " of coins on the table."
+    putStrLn "Do you want to be a first player (Y)? "
+    isFirstAnswer <- lowerString <$> getLine
+    if isFirstAnswer == "y"
+        then turn randCoins PunyHuman
+        else turn randCoins GloriousAI
+    putStrLn "The game is over!"
+    getLine
+    return ()
+
+
+main = do
+    gen <- getStdGen
+    startTheGame gen
