@@ -17,8 +17,7 @@ turnAction coins player
             $  "\nThere're currently  "
             ++ show coins
             ++ " coins on the table. Pick from 1-3: "
-        playerChoiceStr <- getLine
-        let playerChoice  = read playerChoiceStr :: Int
+        playerChoice <- read <$> getLine
         let leftOverCoins = coins - playerChoice
         if leftOverCoins >= 0 && playerChoice > 0 && playerChoice < 4
             then do
@@ -30,7 +29,7 @@ turnAction coins player
                     ++ " remaining."
                 return leftOverCoins
             else do
-                putStrLn "Can't do that! Learn to count!"
+                putStrLn "\nCan't do that! Learn to count!"
                 turnAction coins player
     | player == GloriousAI = do
         let aiChoice      = calculateNextMove coins
